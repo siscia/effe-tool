@@ -1,17 +1,16 @@
 package main
 
 import (
-    "flag"
-    "fmt"
-    "os"
-    "io/ioutil"
-    "errors"
-    "math/rand"
-    "time"
-    "strconv"
-    "os/exec"
+	"errors"
+	"flag"
+	"fmt"
+	"io/ioutil"
+	"math/rand"
+	"os"
+	"os/exec"
+	"strconv"
+	"time"
 )
-
 
 var logic = `
    package logic
@@ -42,7 +41,6 @@ var logic = `
     }
     
     func Stop(ctx Context) {return }`
-
 
 var core = `
     package main
@@ -86,73 +84,85 @@ var core = `
     }
 `
 
-
 func random_suffix() string {
-    return strconv.Itoa(100000 + rand.Intn(1000000))
+	return strconv.Itoa(100000 + rand.Intn(1000000))
 }
 
 func new_file(path string, source string) error {
-    _, err := os.Stat(path)
-    if os.IsNotExist(err) {
-        err = ioutil.WriteFile(path, []byte(source), 0644)
-        if err != nil {
-	    return err
+	_, err := os.Stat(path)
+	if os.IsNotExist(err) {
+		err = ioutil.WriteFile(path, []byte(source), 0644)
+		if err != nil {
+			return err
+		}
+		return nil
 	}
-	return nil
-    }
-    return errors.New("The file already exist")
+	return errors.New("The file already exist")
 }
 
-
-// main 
+// main
 // create scafholding logic.go package
 // create new dir
 func main() {
 
-    rand.Seed(time.Now().UnixNano())
+	rand.Seed(time.Now().UnixNano())
 
-    nw := flag.String("new", "", "Create new scafholding file")
-   // project := flag.String("project", "", "Create new project")
-    compile := flag.String("compile", "", "Compile the single source file")
-   // release := flag.String("release", "", "Compile the files of the directories into binaries")
-   // indipendent := flag.Bool("indipendent", true, "Compile all the binaries down to completely indipendent executables")
+	nw := flag.String("new", "", "Create new scafholding file")
+	// project := flag.String("project", "", "Create new project")
+	compile := flag.String("compile", "", "Compile the single source file")
+	// release := flag.String("release", "", "Compile the files of the directories into binaries")
+	// indipendent := flag.Bool("indipendent", true, "Compile all the binaries down to completely indipendent executables")
 
-    flag.Parse()
+	flag.Parse()
 
-    fmt.Println("Welcome :)")
+	fmt.Println("Welcome :)")
 
-    if *nw != "" {
-	err := new_file(*nw, logic)
-	if err != nil {
-	    fmt.Println("Error creating the new file.")
-	    fmt.Println(err)
-	    return
-	} else {
-	    fmt.Println("New file sucessfully create, path: " + *nw)
+	if *nw != "" {
+		err := new_file(*nw, logic)
+		if err != nil {
+			fmt.Println("Error creating the new file.")
+			fmt.Println(err)
+			return
+		} else {
+			fmt.Println("New file sucessfully create, path: " + *nw)
+		}
 	}
-    }
 
-    if *compile != "" {
-	dir := "/tmp/effebuild-" + random_suffix()
-	fmt.Println(dir)
-	err := os.Mkdir(dir, 0777)
-	if err != nil {fmt.Println(err); return}
-	err = os.Mkdir(dir + "/logic", 0777)
-	if err != nil {fmt.Println(err); return}
-	err = os.Link(*compile, dir + "/logic/logic.go")
-	if err != nil {fmt.Println(err); return}
-	err = new_file(dir + "/effe.go", core)
-	if err != nil {
-	    fmt.Println("Impossible to create file, exit.")
-	    fmt.Println(err)
-	    return
+	if *compile != "" {
+		dir := "/tmp/effebuild-" + random_suffix()
+		fmt.Println(dir)
+		if err := os.Mkdir(dir, 0777); err != nil {
+			fmt.Println(err)
+			return
+		}
+
+		if err = os.Mkdir(dir+"/logic", 0777); err != nil {
+			fmt.Println(err)
+			return
+		}
+
+		if err = os.Link(*compile, dir+"/logic/logic.go"); err != nil {
+			fmt.Println(err)
+			return
+		}
+
+		if err = new_file(dir+"/effe.go", core); err != nil {
+			fmt.Println("Impossible to create file, exit.")
+			fmt.Println(err)
+			return
+		}
+
+		cmd := exec.Command("go", "build", "-pkgdir", dir, "-o", dir+"/out", "-buildmode=exe", dir+"/effe.go")
+
+		if err = cmd.Start(); err != nil {
+			fmt.Println(err)
+			return
+		}
+
+		if err = cmd.Wait(); err != nil {
+			fmt.Println(err)
+			return
+		}
 	}
-	cmd := exec.Command("go", "build", "-pkgdir", dir, "-o", dir + "/out", "-buildmode=exe", dir + "/effe.go")
-	err = cmd.Start()
-	if err != nil {fmt.Println(err); return}
-	err = cmd.Wait()
-	if err != nil {fmt.Println(err); return}
-    }
 
 }
-
