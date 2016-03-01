@@ -20,6 +20,7 @@ var logic = `
         "fmt"
         "math/rand"
         "time"
+	log "github.com/Sirupsen/logrus"
     )
     
     type Context struct{
@@ -36,7 +37,10 @@ var logic = `
     }
     
     func Run(ctx Context, w http.ResponseWriter, r *http.Request) error {
-        fmt.Fprintf(w, "Hello from Logic: %d", ctx.value)
+        fmt.Fprintf(w, "Hello from Logic with log: %d", ctx.value)
+	log.WithFields(log.Fields{
+    		"animal": "walrus",
+  		}).Info("A walrus appears")
         return nil
     }
     
@@ -136,30 +140,46 @@ func main() {
 			return
 		}
 
-		if err = os.Mkdir(dir+"/logic", 0777); err != nil {
+		dir_src := dir + "/src"
+		if err := os.Mkdir(dir_src, 0777); err != nil {
 			fmt.Println(err)
 			return
 		}
 
-		if err = os.Link(*compile, dir+"/logic/logic.go"); err != nil {
+		dir_effe := dir_src + "/effe"
+		if err := os.Mkdir(dir_effe, 0777); err != nil {
 			fmt.Println(err)
 			return
 		}
 
-		if err = new_file(dir+"/effe.go", core); err != nil {
+		if err := os.Mkdir(dir_effe+"/logic", 0777); err != nil {
+			fmt.Println(err)
+			return
+		}
+
+		if err := os.Link(*compile, dir_effe+"/logic/logic.go"); err != nil {
+			fmt.Println(err)
+			return
+		}
+
+		if err := new_file(dir_effe+"/effe.go", core); err != nil {
 			fmt.Println("Impossible to create file, exit.")
 			fmt.Println(err)
 			return
 		}
 
-		cmd := exec.Command("go", "build", "-pkgdir", dir, "-o", dir+"/out", "-buildmode=exe", dir+"/effe.go")
+		gopath := os.Getenv("GOPATH")
+		os.Setenv("GOPATH", dir+":"+gopath)
+		defer os.Setenv("GOPATH", gopath)
 
-		if err = cmd.Start(); err != nil {
+		cmd := exec.Command("go", "build", "-a", "-o", dir+"/out", "-buildmode=exe", dir_effe+"/effe.go")
+
+		if err := cmd.Start(); err != nil {
 			fmt.Println(err)
 			return
 		}
 
-		if err = cmd.Wait(); err != nil {
+		if err := cmd.Wait(); err != nil {
 			fmt.Println(err)
 			return
 		}
