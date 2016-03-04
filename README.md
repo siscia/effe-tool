@@ -16,7 +16,15 @@ You need to have `go` installed on your machine; if you type `go` in your termin
 
 ### Download effe-tool
 
-The first th
+Assuming your $GOPATH is set and that your $PATH contains $GOPATH/bin, then the quickest way to get `effe-tool` is: 
+
+`go get github.com/siscia/effe-tool`
+
+followed by 
+
+`go install effe-tool`
+
+Otherwise you can simply download the source file and compile it yourself.
 
 ## Create your first effe
 
@@ -28,7 +36,6 @@ Such file is already a valid `effe`, it serves as introductory example, but it i
 
 ``` go
 simo@simo:~/gopath$ ./effe-tool new foo.go
-Welcome :)
 Successfully created the new effe, path: foo.go
 simo@simo:~/gopath$ cat foo.go 
 
@@ -87,7 +94,6 @@ It is also possible to specify in what directory put the executable, `--dirout d
 
 ``` bash
 simo@simo:~/gopath$ ./effe-tool compile foo.go
-Welcome :)
 File: foo.go | Everything went good, the file is been compiled.
 Executable path: /home/simo/gopath/out/hello_effe_v0.1
 simo@simo:~/gopath$ tree out/
