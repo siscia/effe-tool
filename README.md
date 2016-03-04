@@ -44,8 +44,8 @@ import (
 
 var Info string = `
 {
-	"name": "hello_effe",  // these info will be used to create the name of the executable
-	"version": "0.1",
+	"name": "hello_effe",  // these info will be used to 
+	"version": "0.1",      // create the name of the executable
 	"doc" : "Getting start with effe"
 }
 `
