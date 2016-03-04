@@ -18,7 +18,7 @@ func main() {
 
 	app := cli.NewApp()
 	app.Name = "effe-tool"
-	app.Usage = "Utility to create, build and use effe."
+	app.Usage = "Utility to create, build and use effes."
 	app.Version = "0.1.0"
 
 	app.Commands = []cli.Command{
@@ -48,6 +48,5 @@ func main() {
 		},
 	}
 
-	fmt.Println(os.Args)
 	app.Run(os.Args)
 }
