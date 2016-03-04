@@ -14,8 +14,6 @@ func main() {
 
 	rand.Seed(time.Now().UnixNano())
 
-	fmt.Println("Welcome :)")
-
 	app := cli.NewApp()
 	app.Name = "effe-tool"
 	app.Usage = "Utility to create, build and use effes."
