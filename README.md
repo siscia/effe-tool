@@ -44,7 +44,7 @@ import (
 
 var Info string = `
 {
-	"name": "hello_effe",
+	"name": "hello_effe",  // these info will be used to create the name of the executable
 	"version": "0.1",
 	"doc" : "Getting start with effe"
 }
@@ -86,9 +86,10 @@ This simple command will compile your `effe`, the executable will be called as s
 It is also possible to specify in what directory put the executable, `--dirout dir_name` (default to `out/`) and how to call the executable, `--out name`, by default it will be called using the variable `Info` inside the source file.
 
 ``` bash
-simo@simo:~/gopath$ ./effe-tool compile foo.go 
+simo@simo:~/gopath$ ./effe-tool compile foo.go
 Welcome :)
-File: foo.go | Everything went good, the file is been compiled and the executable is on: /home/simo/gopath/out/hello_effe_v0.1
+File: foo.go | Everything went good, the file is been compiled.
+Executable path: /home/simo/gopath/out/hello_effe_v0.1
 simo@simo:~/gopath$ tree out/
 out/
 └── hello_effe_v0.1
