@@ -148,7 +148,7 @@ func compileFile(path, dirName, execName string) error {
 	if execName == "" {
 		execName, execVersion, err = getNameVersion(tmpExecPath)
 		if err != nil {
-			fmt.Println("File: " + path + " | Error in the executable info, actual path is: " + tmpExecPath)
+			fmt.Println("File: " + path + " | Error in the executable info.\nActual path is: " + tmpExecPath)
 			return err
 		}
 	}
@@ -157,18 +157,19 @@ func compileFile(path, dirName, execName string) error {
 	execName = createFilenameExecutable(execName, execVersion)
 	totalPath, err := filepath.Abs(dirName + `/` + execName)
 	if err != nil {
-		fmt.Println("File: " + path + " | Error in getting the absolute path, actual path is: " + tmpExecPath)
+		fmt.Println("File: " + path + " | Error in getting the absolute path.\nActual path is: " + tmpExecPath)
 		return err
 	}
 	if err := os.MkdirAll(filepath.Dir(totalPath), 0777); err != nil {
 		fmt.Println("File: " + path + " | Impossible to create the directory: " + filepath.Dir(totalPath))
+		fmt.Println("Actual path is: " + tmpExecPath)
 		return err
 	}
 	if err := os.Rename(tmpExecPath, totalPath); err != nil {
 		fmt.Println(err)
-		fmt.Println("File: " + path + " | Impossible to move the executable, actual path is: " + tmpExecPath)
+		fmt.Println("File: " + path + " | Impossible to move the executable.\nActual path is: " + tmpExecPath)
 	}
-	fmt.Println("File: " + path + " | Everything went good, the file is been compiled and the executable is on: " + totalPath)
+	fmt.Println("File: " + path + " | Everything went good, the file is been compiled.\nExecutable path: " + totalPath)
 	return nil
 }
 
