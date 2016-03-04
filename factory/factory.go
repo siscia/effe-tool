@@ -10,7 +10,7 @@ import (
 func CreateNewEffe(c *cli.Context) {
 	filename := c.Args().First()
 	if filename == "" {
-		fmt.Println("Provide an argument as filemane for the effe.")
+		fmt.Println("Provide an argument as filename for the effe.")
 		return
 	}
 	if err := commons.NewFile(filename, sources.Logic); err != nil {
