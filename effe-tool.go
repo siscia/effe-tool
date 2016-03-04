@@ -3,7 +3,6 @@ package main
 import (
 	"effe-tool/builder"
 	"effe-tool/factory"
-	"fmt"
 	"github.com/codegangsta/cli"
 	"math/rand"
 	"os"
