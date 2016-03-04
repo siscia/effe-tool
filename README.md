@@ -116,4 +116,8 @@ You can simply open an issues or a pull request, I will do my best to reply prom
 
 If you want to contribute but you don't know what to do just write me, I have more ideas than time.
 
+## License
+
+`effe-tool` is released under the MIT License, the same of `effe`.
+
 [effe]: https://github.com/siscia/effe
