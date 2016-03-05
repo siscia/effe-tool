@@ -27,7 +27,7 @@ func Init() {
 }
 
 func Start() Context {
-	fmt.Println("Start new Context")
+	fmt.Println("Start new Context") 
 	return Context{1 + rand.Int63n(2)}
 }
 
