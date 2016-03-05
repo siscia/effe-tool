@@ -1,0 +1,3 @@
+[submodule "effe"]
+	path = effe
+	url = git@github.com:siscia/effe.git
