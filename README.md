@@ -35,7 +35,7 @@ This command will created the file `foo.go`.
 Such file is already a valid `effe`, it serves as introductory example, but it is very scarse and you can easily bend it to your will.
 
 ``` go
-simo@simo:~/gopath$ ./effe-tool new foo.go
+simo@simo:~/gopath$ effe-tool new foo.go
 Successfully created the new effe, path: foo.go
 simo@simo:~/gopath$ cat foo.go 
 
@@ -43,10 +43,10 @@ package logic
 
 import (
 	"fmt"
-	log "github.com/Sirupsen/logrus"
 	"math/rand"
 	"net/http"
 	"time"
+		// it is possible to import any library in your gopath
 )
 
 var Info string = `
@@ -66,20 +66,16 @@ func Init() {
 }
 
 func Start() Context {
-	fmt.Println("Start new Context")
+	fmt.Println("Start new Context") 
 	return Context{1 + rand.Int63n(2)}
 }
 
 func Run(ctx Context, w http.ResponseWriter, r *http.Request) error {
-	fmt.Fprintf(w, "Hello from Effe with logs:  %d", ctx.value)
-	log.WithFields(log.Fields{
-		"animal": "walrus",
-	}).Info("A walrus appears")
+	fmt.Fprintf(w, "Hello from Effe:  %d\n", ctx.value)
 	return nil
 }
 
 func Stop(ctx Context) { return }
-
 
 ```
 
@@ -93,7 +89,7 @@ This simple command will compile your `effe`, the executable will be called as s
 It is also possible to specify in what directory put the executable, `--dirout dir_name` (default to `out/`) and how to call the executable, `--out name`, by default it will be called using the variable `Info` inside the source file.
 
 ``` bash
-simo@simo:~/gopath$ ./effe-tool compile foo.go
+simo@simo:~/gopath$ effe-tool compile foo.go
 File: foo.go | Everything went good, the file is been compiled.
 Executable path: /home/simo/gopath/out/hello_effe_v0.1
 simo@simo:~/gopath$ tree out/
@@ -101,7 +97,6 @@ out/
 └── hello_effe_v0.1
 
 0 directories, 1 file
-
 ```
 
 ## Compile a whole directory
@@ -119,6 +114,11 @@ Also, keep in mind that compile preserve the folder structure of the source dire
 Once your `effe` is been compiled you can run it, following the example above it is sufficient to run: `./out/hello_effe_v0,1`
 
 Now if you go to `localhost:8080` you should see a welcome message.
+
+``` bash
+simo@simo:~$ curl http://localhost:8080
+Hello from Effe:  2
+```
 
 ## Contributing
 
