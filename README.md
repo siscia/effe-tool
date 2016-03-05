@@ -1,6 +1,6 @@
 # Effe-tool, create and compile effes.
 
-`effe-tool` is a simple command line utility that let you create and compiles new [effes](effe).
+`effe-tool` is a simple command line utility that let you create and compiles new [effes][effe].
 
 As you may ask what is an `effe`, an effe is an isolable computation unit, it is been build to be an open source alternative to AWS Lambda.
 
