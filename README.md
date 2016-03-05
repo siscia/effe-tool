@@ -114,6 +114,12 @@ When compiling a directory you can still provide the `--dirout dir_name` flag to
 
 Also, keep in mind that compile preserve the folder structure of the source directory into the binary directory.
 
+## Run your effe
+
+Once your `effe` is been compiled you can run it, following the example above it is sufficient to run: `./out/hello_effe_v0,1`
+
+Now if you go to `localhost:8080` you should see a welcome message.
+
 ## Contributing
 
 Please.
