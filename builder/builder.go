@@ -6,6 +6,8 @@ import (
 	"encoding/json"
 	"fmt"
 	"github.com/codegangsta/cli"
+	"hash/fnv"
+	"io"
 	"math/rand"
 	"os"
 	"os/exec"
@@ -57,6 +59,28 @@ func getNameVersion(path string) (name, version string, err error) {
 
 func createFilenameExecutable(name, version string) string {
 	return name + "_v" + version
+}
+
+// executableHash given the path of the executable
+// generate an hash to be used as name.
+// It is the default way to handle not correct info variable.
+func executableHash(path string) (string, error) {
+	file, err := os.Open(path)
+	if err != nil {
+		fmt.Println("File: " + path + " | Error in opening the file to generate hash.")
+		return "", err
+	}
+	defer file.Close()
+
+	hash := fnv.New64a()
+	_, err = io.Copy(hash, file)
+
+	if err != nil {
+		fmt.Println("File: " + path + " | Error in generating the hash.")
+		return "", err
+	}
+
+	return strconv.FormatUint(hash.Sum64(), 10), nil
 }
 
 // compileSingleFile compile an effe to a single binary.
@@ -146,15 +170,38 @@ func compileFile(path, dirName, execName string) error {
 	// Gathering information
 	execVersion := ""
 	if execName == "" {
+
+		// the user want didn't provide a name for the executable
+		// we need to come out with a name
+
 		execName, execVersion, err = getNameVersion(tmpExecPath)
-		if err != nil {
-			fmt.Println("File: " + path + " | Error in the executable info.\nActual path is: " + tmpExecPath)
-			return err
+		if err == nil {
+
+			// everything went well and the names comes from the info variable
+
+			execName = createFilenameExecutable(execName, execVersion)
+		} else {
+
+			// the info variable doesn't provide the right information
+			// we will use the hash of the executable as name
+
+			fmt.Println("File: " + path + " | Error in the executable info.")
+			fmt.Println("File: " + path + " | Falling back to use the hash as name.")
+			hashName, err := executableHash(tmpExecPath)
+			if err != nil {
+
+				// problem generating the hash, we don't move the executable
+
+				fmt.Println("File: " + path + " | Error in generating the hash name.")
+				fmt.Println("File: " + path + " | Actual path is: " + tmpExecPath)
+				return err
+			} else {
+				execName = hashName
+			}
 		}
 	}
 
 	// Moving the file
-	execName = createFilenameExecutable(execName, execVersion)
 	totalPath, err := filepath.Abs(dirName + `/` + execName)
 	if err != nil {
 		fmt.Println("File: " + path + " | Error in getting the absolute path.\nActual path is: " + tmpExecPath)
