@@ -91,7 +91,7 @@ func executableHash(path string) (string, error) {
 // it redirects the Stdout and the Stderr so that the user can
 // actually see compilation errors.
 // It returns the path where the executable is been created
-func compileSingleFile(source_path string) (string, error) {
+func compileSingleFile(sourcePath string) (string, error) {
 
 	// Creating temporany directory and structure
 	dir := os.TempDir() + "/effebuild-" + randomSuffix()
@@ -100,23 +100,23 @@ func compileSingleFile(source_path string) (string, error) {
 		return "", err
 	}
 
-	dir_effe := dir + "/src/effe"
-	if err := os.MkdirAll(dir_effe, 0777); err != nil {
+	dirEffe := dir + "/src/effe"
+	if err := os.MkdirAll(dirEffe, 0777); err != nil {
 		fmt.Println(err)
 		return "", err
 	}
 
-	if err := os.Mkdir(dir_effe+"/logic", 0777); err != nil {
+	if err := os.Mkdir(dirEffe+"/logic", 0777); err != nil {
 		fmt.Println(err)
 		return "", err
 	}
 
-	if err := os.Link(source_path, dir_effe+"/logic/logic.go"); err != nil {
+	if err := os.Link(sourcePath, dirEffe+"/logic/logic.go"); err != nil {
 		fmt.Println(err)
 		return "", err
 	}
 
-	if err := commons.NewFile(dir_effe+"/effe.go", sources.Core); err != nil {
+	if err := commons.NewFile(dirEffe+"/effe.go", sources.Core); err != nil {
 		fmt.Println("Impossible to create file, exit.")
 		fmt.Println(err)
 		return "", err
@@ -128,7 +128,7 @@ func compileSingleFile(source_path string) (string, error) {
 	defer os.Setenv("GOPATH", gopath)
 
 	// actually compile
-	cmd := exec.Command("go", "build", "-a", "-o", dir+"/out", "-buildmode=exe", dir_effe+"/effe.go")
+	cmd := exec.Command("go", "build", "-a", "-o", dir+"/out", "-buildmode=exe", dirEffe+"/effe.go")
 
 	cmd.Stdout = os.Stdout
 	cmd.Stderr = os.Stderr
@@ -195,9 +195,8 @@ func compileFile(path, dirName, execName string) error {
 				fmt.Println("File: " + path + " | Error in generating the hash name.")
 				fmt.Println("File: " + path + " | Actual path is: " + tmpExecPath)
 				return err
-			} else {
-				execName = hashName
 			}
+			execName = hashName
 		}
 	}
 
@@ -249,6 +248,7 @@ func compileDirectory(originalPath string, c *cli.Context) {
 	filepath.Walk(originalPath, walkAndCompile)
 }
 
+// Compile is the main entry point
 func Compile(c *cli.Context) {
 	path := c.Args().First()
 	f, err := os.Lstat(path)
