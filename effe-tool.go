@@ -2,6 +2,7 @@ package main
 
 import (
 	"effe-tool/builder"
+	"effe-tool/docker"
 	"effe-tool/factory"
 	"github.com/codegangsta/cli"
 	"math/rand"
@@ -42,6 +43,12 @@ func main() {
 				},
 			},
 			Action: builder.Compile,
+		},
+		{
+			Name:    "docker",
+			Aliases: []string{"d"},
+			Usage:   "Create docker images of a single executable or of every executable in the directory passed as argument.",
+			Action:  docker.Dockerify,
 		},
 	}
 
