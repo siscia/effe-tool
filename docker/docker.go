@@ -17,13 +17,32 @@ func dockerFile(path string) string {
 	return `
 FROM centurylink/ca-certs
 
-ADD exec ` + `exec` +
-		`
+ADD exec exec
+
 ENTRYPOINT ["./exec"]
 `
 }
 
-func dockerifyDirectory(path string, c *cli.Context) {}
+func dockerifyDirectory(originalPath string, c *cli.Context) {
+	log := func(msg string) {
+		logError(originalPath, msg)
+	}
+
+	walkAndDockerify := func(path string, f os.FileInfo, _ error) error {
+		if f.IsDir() {
+			return nil
+		}
+		if f.Mode().IsRegular() {
+			fmt.Println()
+			err := dockerifyExec(path, c)
+			if err != nil {
+				log("Error dockerifying the file.")
+			}
+		}
+		return nil
+	}
+	filepath.Walk(originalPath, walkAndDockerify)
+}
 
 func dockerGetCompleteName(path string) string {
 	name, version, err := commons.GetNameVersion(path)

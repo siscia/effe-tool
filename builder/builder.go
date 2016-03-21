@@ -22,7 +22,7 @@ func createFilenameExecutable(name, version string) string {
 // it redirects the Stdout and the Stderr so that the user can
 // actually see compilation errors.
 // It returns the path where the executable is been created
-func compileSingleFile(sourcePath string) (string, error) {
+func compileSingleFile(sourcePath string, cgoEnabled bool) (string, error) {
 
 	// Creating temporany directory and structure
 	dir := os.TempDir() + "/effebuild-" + commons.RandomSuffix()
@@ -57,9 +57,12 @@ func compileSingleFile(sourcePath string) (string, error) {
 	gopath := os.Getenv("GOPATH")
 	os.Setenv("GOPATH", dir+":"+gopath)
 	defer os.Setenv("GOPATH", gopath)
-	cgoEnabled := os.Getenv("CGO_ENABLED")
-	os.Setenv("CGO_ENABLED", "0")
-	defer os.Setenv("CGO_ENABLED", cgoEnabled)
+
+	if cgoEnabled == true {
+		cgoEnabled := os.Getenv("CGO_ENABLED")
+		os.Setenv("CGO_ENABLED", "0")
+		defer os.Setenv("CGO_ENABLED", cgoEnabled)
+	}
 
 	// actually compile
 	cmd := exec.Command("go", "build", "-a", "-ldflags", "'-s'", "-o", dir+"/out", "-buildmode=exe", dirEffe+"/effe.go")
@@ -93,9 +96,9 @@ func compileSingleFile(sourcePath string) (string, error) {
 // it has a default value set on the flag to `out`.
 // `execName` is the name of the executable, if not given
 // `compileFile` try to use the effe convetion to provide a name.
-func compileFile(path, dirName, execName string) error {
+func compileFile(path, dirName, execName string, cgoEnabled bool) error {
 	// Actually compiling
-	tmpExecPath, err := compileSingleFile(path)
+	tmpExecPath, err := compileSingleFile(path, cgoEnabled)
 	if err != nil {
 		fmt.Println("File: " + path + " | Impossible to compile.")
 		return err
@@ -172,7 +175,7 @@ func compileDirectory(originalPath string, c *cli.Context) {
 				return nil
 			}
 			execLocation := filepath.Dir(relativePath)
-			err = compileFile(path, c.String("dirout")+"/"+execLocation, "")
+			err = compileFile(path, c.String("dirout")+"/"+execLocation, "", c.Bool("cgo"))
 			if err != nil {
 				fmt.Println(err)
 			}
@@ -194,7 +197,7 @@ func Compile(c *cli.Context) {
 		compileDirectory(path, c)
 	}
 	if f.Mode().IsRegular() {
-		err := compileFile(path, c.String("dirout"), c.String("out"))
+		err := compileFile(path, c.String("dirout"), c.String("out"), c.Bool("cgo"))
 		if err != nil {
 			fmt.Println(err)
 		}

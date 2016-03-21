@@ -41,6 +41,10 @@ func main() {
 					Value: "",
 					Usage: "Custom name to save your executable.",
 				},
+				cli.BoolFlag{
+					Name:  "cgo",
+					Usage: "Set to true to enable cgo.",
+				},
 			},
 			Action: builder.Compile,
 		},
