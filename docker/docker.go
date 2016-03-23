@@ -1,9 +1,9 @@
 package docker
 
 import (
-	"effe-tool/commons"
 	"fmt"
 	"github.com/codegangsta/cli"
+	"github.com/siscia/effe-tool/commons"
 	"os"
 	"os/exec"
 	"path/filepath"
