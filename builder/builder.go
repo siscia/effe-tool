@@ -1,14 +1,10 @@
 package builder
 
 import (
-	"encoding/json"
 	"fmt"
 	"github.com/codegangsta/cli"
 	"github.com/siscia/effe-tool/commons"
 	"github.com/siscia/effe-tool/sources"
-	"hash/fnv"
-	"io"
-	"math/rand"
 	"os"
 	"os/exec"
 	"path/filepath"

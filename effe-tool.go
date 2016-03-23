@@ -1,6 +1,7 @@
 package main
 
 import (
+	"effe-tool/docker"
 	"github.com/codegangsta/cli"
 	"github.com/siscia/effe-tool/builder"
 	"github.com/siscia/effe-tool/factory"
