@@ -58,7 +58,7 @@ func compileSingleFile(sourcePath string, cgoEnabled bool) (string, error) {
 	os.Setenv("GOPATH", dir+":"+gopath)
 	defer os.Setenv("GOPATH", gopath)
 
-	if cgoEnabled == true {
+	if cgoEnabled == false {
 		cgoEnabled := os.Getenv("CGO_ENABLED")
 		os.Setenv("CGO_ENABLED", "0")
 		defer os.Setenv("CGO_ENABLED", cgoEnabled)

@@ -19,7 +19,7 @@ FROM centurylink/ca-certs
 
 ADD exec exec
 
-ENTRYPOINT ["./exec"]
+ENTRYPOINT ["/exec"]
 `
 }
 
