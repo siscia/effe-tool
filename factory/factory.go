@@ -1,10 +1,10 @@
 package factory
 
 import (
-	"effe-tool/commons"
-	"effe-tool/sources"
 	"fmt"
 	"github.com/codegangsta/cli"
+	"github.com/siscia/effe-tool/commons"
+	"github.com/siscia/effe-tool/sources"
 )
 
 func CreateNewEffe(c *cli.Context) {

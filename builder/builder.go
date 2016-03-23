@@ -1,10 +1,14 @@
 package builder
 
 import (
-	"effe-tool/commons"
-	"effe-tool/sources"
+	"encoding/json"
 	"fmt"
 	"github.com/codegangsta/cli"
+	"github.com/siscia/effe-tool/commons"
+	"github.com/siscia/effe-tool/sources"
+	"hash/fnv"
+	"io"
+	"math/rand"
 	"os"
 	"os/exec"
 	"path/filepath"

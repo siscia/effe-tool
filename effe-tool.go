@@ -1,10 +1,9 @@
 package main
 
 import (
-	"effe-tool/builder"
-	"effe-tool/docker"
-	"effe-tool/factory"
 	"github.com/codegangsta/cli"
+	"github.com/siscia/effe-tool/builder"
+	"github.com/siscia/effe-tool/factory"
 	"math/rand"
 	"os"
 	"time"

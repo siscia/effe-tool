@@ -1,3 +1,4 @@
+[![Build Status](https://travis-ci.org/siscia/effe-tool.svg?branch=master)](https://travis-ci.org/siscia/effe-tool)
 # Effe-tool, create and compile effes.
 
 `effe-tool` is a simple command line utility that let you create and compiles new [effes][effe].
@@ -16,11 +17,11 @@ You need to have `go` installed on your machine; if you type `go` in your termin
 
 ### Download effe-tool
 
-Assuming your $GOPATH is set and that your $PATH contains $GOPATH/bin, then the quickest way to get `effe-tool` is: 
+Assuming your $GOPATH is set and that your $PATH contains $GOPATH/bin, then the quickest way to get `effe-tool` is:
 
 `go get github.com/siscia/effe-tool`
 
-followed by 
+followed by
 
 `go install effe-tool`
 
@@ -28,16 +29,16 @@ Otherwise you can simply download the source file and compile it yourself.
 
 ## Create your first effe
 
-To create your first `effe` all you need to do is `effe-tool new foo.go`. 
+To create your first `effe` all you need to do is `effe-tool new foo.go`.
 
-This command will created the file `foo.go`. 
+This command will created the file `foo.go`.
 
 Such file is already a valid `effe`, it serves as introductory example, but it is very scarse and you can easily bend it to your will.
 
 ``` go
 simo@simo:~/gopath$ effe-tool new foo.go
 Successfully created the new effe, path: foo.go
-simo@simo:~/gopath$ cat foo.go 
+simo@simo:~/gopath$ cat foo.go
 
 package logic
 
@@ -51,7 +52,7 @@ import (
 
 var Info string = `
 {
-	"name": "hello_effe",  // these info will be used to 
+	"name": "hello_effe",  // these info will be used to
 	"version": "0.1",      // create the name of the executable
 	"doc" : "Getting start with effe"
 }
@@ -66,7 +67,7 @@ func Init() {
 }
 
 func Start() Context {
-	fmt.Println("Start new Context") 
+	fmt.Println("Start new Context")
 	return Context{1 + rand.Int63n(2)}
 }
 
