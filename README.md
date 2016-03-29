@@ -9,7 +9,7 @@ As you may ask what is an `effe`, an effe is an isolable computation unit, it is
 
 Since `effe`s are state-less they provide you the foundation to build infinitely scalable systems, `effe-tool` provides the ability to manage those systems in a sane way.
 
-## Getting Start
+## Getting Started
 
 `effe` and `effe-tool` are built in go, I am assuming that you are not completely foreign to the languange.
 
@@ -100,6 +100,28 @@ out/
 0 directories, 1 file
 ```
 
+Please keep in mind that effes are compiled with the option `GCO_ENABLE=0`
+
+This because it makes possible to run `effe` in a extremely light container.
+
+Since the GCO disabled could break something, is still possible to compile with GCO enabled, just pass the `--cgo` option during the compilation phase.
+
+``` bash
+simo@simo:~/gopath$ effe-tool compile foo.go 
+File: foo.go | Everything went good, the file is been compiled.
+Executable path: /home/simo/gopath/out/hello_effe_v0.1
+simo@simo:~/gopath$ ldd out/hello_effe_v0.1 
+	not a dynamic executable
+simo@simo:~/gopath$ effe-tool compile --cgo foo.go 
+File: foo.go | Everything went good, the file is been compiled.
+Executable path: /home/simo/gopath/out/hello_effe_v0.1
+simo@simo:~/gopath$ ldd out/hello_effe_v0.1 
+	linux-vdso.so.1 =>  (0x00007fffceffe000)
+	libpthread.so.0 => /lib/x86_64-linux-gnu/libpthread.so.0 (0x00007ffd5ac85000)
+	libc.so.6 => /lib/x86_64-linux-gnu/libc.so.6 (0x00007ffd5a8c0000)
+	/lib64/ld-linux-x86-64.so.2 (0x00007ffd5aecd000)
+```
+
 ## Compile a whole directory
 
 It is also possible to compile a whole directory of `effe`s.
@@ -120,6 +142,35 @@ Now if you go to `localhost:8080` you should see a welcome message.
 simo@simo:~$ curl http://localhost:8080
 Hello from Effe:  2
 ```
+
+## Docker integration
+
+It is also possible to create docker containers out of compiled `effe`.
+
+Under the hood `effe-tool` simply invoke the docker commands, so make sure that your user can create the docker container.
+
+``` bash
+simo@simo:~/gopath$ effe-tool docker out/hello_effe_v0.1 
+WARNING: Error loading config file:/home/simo/.docker/config.json - stat /home/simo/.docker/config.json: permission denied
+Sending build context to Docker daemon  5.48 MB
+Step 1 : FROM centurylink/ca-certs
+ ---> ec29b98d130f
+Step 2 : ADD exec exec
+ ---> 9dae5b436645
+Removing intermediate container 927ade657ba3
+Step 3 : ENTRYPOINT /exec
+ ---> Running in b8abe3aafa78
+ ---> 8f4339a840f7
+Removing intermediate container b8abe3aafa78
+Successfully built 8f4339a840f7
+File: out/hello_effe_v0.1 | Everything went good: /tmp/effedocker-849288
+simo@simo:~/gopath$ 
+simo@simo:~/gopath$ docker images
+REPOSITORY                                 TAG                 IMAGE ID            CREATED             SIZE
+hello_effe                                 0.1                 8f4339a840f7        16 seconds ago      5.735 MB
+```
+
+The docker images is extremely simple, it start from `centurylink/ca-certs` which is the `SCRATCH` images plus some certificated so that your effe can make HTTPS calls.
 
 ## Contributing
 
