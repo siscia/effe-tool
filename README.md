@@ -180,6 +180,11 @@ You can simply open an issues or a pull request, I will do my best to reply prom
 
 If you want to contribute but you don't know what to do just write me, I have more ideas than time.
 
+If the effe source is modified is necessary to reload it using: 
+`go-bindata -o sources/bindata.go -pkg sources effe/effe.go effe/logic/logic.go` from the `effe-tool` root.
+
+The command will generate a source file `source/bindata.go` that contains the file saved as byte.
+
 ## License
 
 `effe-tool` is released under the MIT License, the same of `effe`.
