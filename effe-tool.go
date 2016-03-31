@@ -17,7 +17,7 @@ func main() {
 	app := cli.NewApp()
 	app.Name = "effe-tool"
 	app.Usage = "Utility to create, build and use effes."
-	app.Version = "0.2.1"
+	app.Version = "0.2.3"
 
 	app.Commands = []cli.Command{
 		{
