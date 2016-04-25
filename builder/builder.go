@@ -31,7 +31,7 @@ func compileSingleFile(sourcePath string, cgoEnabled bool) (string, error) {
 		return "", err
 	}
 
-	dirEffe := dir + "/src/effe"
+	dirEffe := dir + "/src/github.com/siscia/effe"
 	if err := os.MkdirAll(dirEffe, 0777); err != nil {
 		fmt.Println(err)
 		return "", err
